@@ -10,6 +10,8 @@ class PoemRouter extends StatefulWidget {
 
   @override
   State<PoemRouter> createState() => _PoemRouterState();
+
+  static final AppTitle = "Poem";
 }
 
 class _PoemRouterState extends State<PoemRouter> {
@@ -21,7 +23,7 @@ class _PoemRouterState extends State<PoemRouter> {
   ];
   
   final bottomNavBarItemBodies = [
-    const MyHomePage(title: 'SilentChan')
+    const HomePage()
     ,SearchPage()
     ,MinePage()
   ];

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/html_parser.dart';
-import 'package:flutter_html/style.dart';
+import 'package:flutter_poem/util/constantUtil.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key? key}) : super(key: key);
@@ -10,103 +9,55 @@ class SearchPage extends StatefulWidget {
 }
 
 const htmlData = """
-<h1>Header 1</h1>
-<h2>Header 2</h2>
-<h3>Header 3</h3>
-<h4>Header 4</h4>
-<h5>Header 5</h5>
-<h6>Header 6</h6>
-<h3>Ruby Support:</h3>
-      <p>
-        <ruby>
-          漢<rt>かん</rt>
-          字<rt>じ</rt>
-        </ruby>
-        &nbsp;is Japanese Kanji.
-      </p>
-      <h3>Support for <code>sub</code>/<code>sup</code></h3>
-      Solve for <var>x<sub>n</sub></var>: log<sub>2</sub>(<var>x</var><sup>2</sup>+<var>n</var>) = 9<sup>3</sup>
-      <p>One of the most <span>common</span> equations in all of physics is <br /><var>E</var>=<var>m</var><var>c</var><sup>2</sup>.</p>
-      <h3>Table support (with custom styling!):</h3>
-      <p>
-      <q>Famous quote...</q>
-      </p>
-      <table>
-      <colgroup>
-        <col width="50%" />
-        <col width="25%" />
-        <col width="25%" />
-      </colgroup>
-      <thead>
-      <tr><th>One</th><th>Two</th><th>Three</th></tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>Data</td><td>Data</td><td>Data</td>
-      </tr>
-      <tr>
-        <td>Data</td><td>Data</td><td>Data</td>
-      </tr>
-      </tbody>
-      <tfoot>
-      <tr><td>fData</td><td>fData</td><td>fData</td></tr>
-      </tfoot>
-      </table>
-      <h3>Custom Element Support:</h3>
-      <flutter></flutter>
-      <flutter horizontal></flutter>
-      <h3>SVG support:</h3>
-      <svg id='svg1' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
-            <circle r="32" cx="35" cy="65" fill="#F00" opacity="0.5"/>
-            <circle r="32" cx="65" cy="65" fill="#0F0" opacity="0.5"/>
-            <circle r="32" cx="50" cy="35" fill="#00F" opacity="0.5"/>
-      </svg>
-      <h3>List support:</h3>
-      <ol>
-            <li>This</li>
-            <li><p>is</p></li>
-            <li>an</li>
-            <li>
-            ordered
-            <ul>
-            <li>With<br /><br />...</li>
-            <li>a</li>
-            <li>nested</li>
-            <li>unordered
-            <ol>
-            <li>With a nested</li>
-            <li>ordered list.</li>
-            </ol>
-            </li>
-            <li>list</li>
-            </ul>
-            </li>
-            <li>list! Lorem ipsum dolor sit amet.</li>
-            <li><h2>Header 2</h2></li>
-            <h2><li>Header 2</li></h2>
-      </ol>
-      <h3>Link support:</h3>
-      <p>
-        Linking to <a href='https://github.com'>websites</a> has never been easier.
-      </p>
-      <h3>Image support:</h3>
-      <p>
-        <img alt='Google' src='https://www.google.cn/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png' />
-        <a href='https://google.com'><img alt='Google' src='https://www.google.cn/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png' /></a>
-        <img alt='Alt Text of an intentionally broken image' src='https://www.google.cn/images/branding/googlelogo/2x/googlelogo_color_92x30d' />
-      </p>
-      <!--
-      <h3>Video support:</h3>
-      <video controls>
-        <source src="https://www.w3schools.com/html/mov_bbb.mp4" />
-      </video>
-      <h3>Audio support:</h3>
-      <audio controls>
-        <source src="https://www.w3schools.com/html/horse.mp3" />
-      </audio>
-      <h3>IFrame support:</h3>
-      <iframe src="https://google.com"></iframe>
-      -->
+ <div class="contson">
+ <h1 align="center"><strong>FuckBanker</strong></h1>
+            <p>　　南山经之首曰䧿山。其首曰招摇之山，临于西海之上，多桂，多金玉。有草焉，其状如韭而青华，其名曰祝馀，食之不饥。有木焉，其状如榖而黑理，其华四照。其名曰迷榖，佩之不迷。有兽焉，其状如禺而白耳，伏行人走，其名曰狌狌，食之善走。丽麂之水出焉，而西流注于海，其中多育沛，佩之无瘕疾。</p>
+<p>　　又东三百里，曰堂庭之山。多棪木，多白猿，多水玉，多黄金。</p>
+<p>　　又东三百八十里，曰猨翼之山，其中多怪兽，水多怪鱼。多白玉，多蝮虫，多怪蛇，多怪木，不可以上。</p>
+<p>　　又东三百七十里，曰杻阳之山，其阳多赤金，其阴多白金。有兽焉，其状如马而白首，其文如虎而赤尾，其音如谣，其名曰鹿蜀，佩之宜子孙。怪水出焉，而东流注于宪翼之水。其中多玄龟，其状如龟而鸟首虺尾，其名曰旋龟，其音如判木，佩之不聋，可以为底。</p>
+<p>　　又东三百里，曰柢山，多水，无草木。有鱼焉，其状如牛，陵居，蛇尾有翼，其羽在魼下，其音如留牛，其名曰鯥，冬死而夏生。食之无肿疾。</p>
+<p>　　又东四百里，曰亶爰之山，多水，无草木，不可以上。有兽焉，其状如狸而有髦，其名曰类，自为牝牡，食者不妒。</p>
+<p>　　又东三百里，曰基山，其阳多玉，其阴多怪木。有兽焉，其状如羊，九尾四耳，其目在背，其名曰猼訑，佩之不畏。有鸟焉，其状如鸡而三首六目、六足三翼，其名曰[尚鸟] [付鸟]，食之无卧。</p>
+<p>　　又东三百里，曰青丘之山，其阳多玉，其阴多青䨼。有兽焉，其状如狐而九尾，其音如婴儿，能食人；食者不蛊。有鸟焉，其状如鸠，其音如呵，名曰灌灌，佩之不惑。英水出焉，南流注于即翼之泽。其中多赤鱬，其状如鱼而人面，其音如鸳鸯，食之不疥。</p>
+<p>　　又东三百五十里，曰箕尾之山，其尾踆于东海，多沙石。汸水出焉，而南流注于淯，其中多白玉。</p>
+<p>　　凡䧿山之首，自招摇之山，以至箕尾之山，凡十山，二千九百五十里。其神状皆鸟身而龙首。其祠之礼：毛用一璋玉瘗，糈用稌米，一壁，稻米、白菅为席。</p>
+<p>　　南次二山之首，曰柜山，西临流黄，北望诸𣬈，东望长右。英水出焉，西南流注于赤水，其中多白玉，多丹粟。有兽焉，其状如豚，有距，其音如狗吠，其名曰狸力，见则其县多土功。有鸟焉，其状如鸱而人手，其音如痺，其名曰鴸，其名自号也，见则其县多放士。</p>
+<p>　　东南四百五十里，曰长右之山，无草木，多水。有兽焉，其状如禺而四耳，其名长右，其音如吟，见则郡县大水。</p>
+<p>　　又东三百四十里，曰尧光之山，其阳多玉，其阴多金。有兽焉，其状如人而彘鬣，穴居而冬蛰，其名曰猾褢，其音如斫木，见则县有大繇。</p>
+<p>　　又东三百五十里，曰羽山，其下多水，其上多雨，无草木，多蝮虫。</p>
+<p>　　又东三百七十里，曰瞿父之山，无草木，多金玉。</p>
+<p>　　又东四百里，曰句汸之山，无草木，多金玉。</p>
+<p>　　又东五百里，曰浮玉之山，北望具区，东望诸𣬈。有兽焉，其状如虎而牛尾，其音如吠犬，其名曰彘，是食人。苕水出于其阴，北流至于具区，其中多鮆鱼。</p>
+<p>　　又东五百里，曰成山，四方而三坛，其上多金玉，其下多青雘。𨴯水出焉，而南流注于虖勺，其中多黄金。</p>
+<p>　　又东五百里，曰会稽之山，四方，其上多金玉，其下多砆石。勺水出焉，而南流注于湨。</p>
+<p>　　又东五百里，曰夷山，无草木，多沙石，湨水出焉，而南流注于列涂。</p>
+<p>　　又东五百里，曰仆勾之山，其上多金玉，其下多草木，无鸟兽，无水。</p>
+<p>　　又东五百里，曰咸阴之山，无草木，无水。</p>
+<p>　　又东四百里，曰洵山。其阳多金，其阴多玉。有兽焉，其状如羊而无口，不可杀也，其名曰䍺。洵水出焉，而南流注于阏之泽，其中多茈蠃。</p>
+<p>　　又东四百里，曰虖勺之山。其上多梓枏，其下多荆杞。滂水出焉，而东流注于海。</p>
+<p>　　又东五百里，曰区吴之山，无草木，多沙石。鹿水出焉，而南流注于滂水。</p>
+<p>　　又东五百里，曰鹿吴之山，上无草木，多金石。泽更之水出焉，而南流注于滂水。水有兽焉，名曰蛊雕，其状如雕而有角，其音如婴儿之音，是食人。</p>
+<p>　　又东五百里，曰漆吴之山，无草木，多博石，无玉。处于东海，望丘山，其光载出载入，是惟日次。</p>
+<p>　　凡南次二山之首，自柜山至于漆吴之山，凡十七山，七千二百里。其神状皆龙身而鸟首。其祠：毛用一壁瘗，糈用稌。</p>
+<p>　　南次三山之首，曰天虞之山。其下多水，不可以上。</p>
+<p>　　东五百里，曰祷过之山，其上多金玉，其下多犀兕，多象。有鸟焉，其状如鵁，而白首、三足、人面，其名曰瞿如，其鸣自号也。泿水出焉，而南流注于海。其中有虎蛟，其状鱼身而蛇尾，其音如鸳鸯，食者不肿，可以已痔。</p>
+<p>　　又东五百里，曰丹穴之山，其上多金玉。丹水出焉，而南流注于渤海。有鸟焉，其状如鸡，五采而文，名曰凤皇，首文曰德，翼文曰义，背文曰礼，膺文曰仁，腹文曰信。是鸟也，饮食自然，自歌自舞，见则天下安宁。</p>
+<p>　　又东五百里，曰发爽之山，无草木，多水，多白猿。汎水出焉，而南流注于勃海。</p>
+<p>　　又东四百里，至于旄山之尾，其南有谷，曰育遗，多怪鸟，凯风自是出。</p>
+<p>　　又东四百里，至于非山之首，其上多金玉，无水，其下多蝮虫。</p>
+<p>　　又东五百里，曰阳夹之山，无草木，多水。</p>
+<p>　　又东五百里，曰灌湘之山，上多木，无草。多怪鸟，无兽。</p>
+<p>　　又东五百里，曰鸡山，其上多金，其下多丹雘。黑水出焉，而南流注于海。其中有鱄鱼，其状如鲋而彘毛，其音如豚，见则天下大旱。</p>
+<p>　　又东四百里，曰令丘之山，无草木，多火。其南有谷焉，曰中谷，条风自是出。有鸟焉，其状如袅，人面四目而有耳，其名曰顒，其鸣自号也，见则天下大旱。</p>
+<p>　　又东三百七十里，曰仑者之山，其上多金玉，其下多青雘。有木焉，其状如榖而赤理，其汗如漆，其味如饴，食者不饥，可以释劳，其名曰白䓘，可以血玉。</p>
+<p>　　又东五百八十里，曰禺槀之山，多怪兽，多大蛇。</p>
+<p>　　又东五百八十里，曰南禺之山，其上多金玉，其下多水。有穴焉，水出辄入，夏乃出，冬则闭。佐水出焉，而东南流注于海，有凤皇、鵷雏。</p>
+<p>　　凡南次三山之首，自天虞之山以至南禺之山，凡一十四山，六千五百三十里。其神皆龙身而人面。其祠皆一白狗祈，稰用稌。</p>
+<p>　　右南经之山志，大小凡四十山，万六千三百八十里。</p>
+            </div>
+
+        </div>
+        
 """;
 
 class _SearchPageState extends State<SearchPage> {
@@ -116,44 +67,22 @@ class _SearchPageState extends State<SearchPage> {
     // ignore: unnecessary_new
     return new Scaffold(
       appBar: AppBar(
-        title: Text('flutter_html Example'),
-        centerTitle: true,
+        title: const Text(ConstantUtil.AppTitle),
       ),
       body: SingleChildScrollView(
         child: Html(
           data: htmlData,
           //Optional parameters:
           style: {
-            "html": Style(
-              backgroundColor: Colors.black12,
-//              color: Colors.white,
+            "strong": Style(
+              color: Colors.red,
+              
             ),
-//            "h1": Style(
-//              textAlign: TextAlign.center,
-//            ),
-            "table": Style(
-              backgroundColor: Color.fromARGB(0x50, 0xee, 0xee, 0xee),
+            "h1": Style(
+              textAlign: TextAlign.center,
             ),
-            "tr": Style(
-              border: Border(bottom: BorderSide(color: Colors.grey)),
-            ),
-            "th": Style(
-              padding: EdgeInsets.all(6),
-              backgroundColor: Colors.grey,
-            ),
-            "td": Style(
-              padding: EdgeInsets.all(6),
-            ),
-            "var": Style(fontFamily: 'serif'),
           },
-          customRender: {
-            "flutter": (RenderContext rcontext, Widget child, attributes, _) {
-              return FlutterLogo(
-                style: (attributes['horizontal'] != null) ? FlutterLogoStyle.horizontal : FlutterLogoStyle.markOnly,
-              );
-            }
-          },
-        ),
+        ),        
       ),
     );
   }
