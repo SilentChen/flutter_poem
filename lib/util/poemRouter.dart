@@ -10,16 +10,14 @@ class PoemRouter extends StatefulWidget {
 
   @override
   State<PoemRouter> createState() => _PoemRouterState();
-
-  static final AppTitle = "Poem";
 }
 
 class _PoemRouterState extends State<PoemRouter> {
   
   final List<BottomNavigationBarItem> bottomNavBarItems = [
-    BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), label: 'Home')
-    , BottomNavigationBarItem(icon: Icon(CupertinoIcons.search), label: 'Search')
-    , BottomNavigationBarItem(icon: Icon(CupertinoIcons.profile_circled), label: 'Me')
+    const BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), label: 'Home')
+    , const BottomNavigationBarItem(icon: Icon(CupertinoIcons.search), label: 'Search')
+    , const BottomNavigationBarItem(icon: Icon(CupertinoIcons.profile_circled), label: 'Me')
   ];
   
   final bottomNavBarItemBodies = [
@@ -29,6 +27,7 @@ class _PoemRouterState extends State<PoemRouter> {
   ];
   
   int currentPageIndex = 0;
+  // ignore: prefer_typing_uninitialized_variables
   var currentPageObj;
 
   @override
