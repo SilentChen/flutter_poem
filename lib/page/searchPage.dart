@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_poem/util/constantUtil.dart';
+import 'package:flutter_poem/util/poemConstantUtil.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key? key}) : super(key: key);
@@ -67,7 +67,7 @@ class _SearchPageState extends State<SearchPage> {
     // ignore: unnecessary_new
     return new Scaffold(
       appBar: AppBar(
-        title: const Text(ConstantUtil.AppTitle),
+        title: const Text(PoemConstant.appTitle),
       ),
       body: SingleChildScrollView(
         child: Html(

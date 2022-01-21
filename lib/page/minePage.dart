@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_poem/util/constantUtil.dart';
+import 'package:flutter_poem/util/poemConstantUtil.dart';
 
 class MinePage extends StatefulWidget {
   const MinePage({Key? key}) : super(key: key);
@@ -24,7 +24,7 @@ class _MinePageState extends State<MinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(      
-        title: const Text(ConstantUtil.AppTitle),
+        title: const Text(PoemConstant.appTitle),
       ),
       body: Center(
         child: Column(         

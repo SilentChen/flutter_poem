@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_poem/component/toastComponent.dart';
 import 'package:flutter_poem/models/NewsListItemModel.dart';
-import 'package:flutter_poem/util/constantUtil.dart';
+import 'package:flutter_poem/util/poemConstantUtil.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -15,24 +17,24 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   
-  int page = 1;
+  int pageCursor  = 1;
   int pageItemNum = 20;
-  bool isCanLoadMore = true;
+  bool isPageMore = true;
   List<NewsListItemModel> newsList = [];
   var scrollCtl = ScrollController();
   
-  
   Future<List<NewsListItemModel>> getNewsList() async {
+    if(!isPageMore) return [];
     
-    if(!isCanLoadMore) return [];
-
     HttpClient network = HttpClient();    
     Uri uri = Uri(
         scheme: 'http',
         host: 'api.cportal.cctv.com',
         path: '/api/rest/navListInfo/getHandDataListInfoNew',
-        query: 'id=Nav-9Nwml0dIB6wAxgd9EfZA160510&toutuNum=5&version=1&p=$page&n=$pageItemNum');        
-    HttpClientRequest request = await network.getUrl(uri);
+        query: 'id=Nav-9Nwml0dIB6wAxgd9EfZA160510&toutuNum=5&version=1&p=$pageCursor&n=$pageItemNum');        
+    
+    print('Uri: $uri');
+    HttpClientRequest request   = await network.getUrl(uri);
     HttpClientResponse response = await request.close();
     var responseBody = await response.transform(utf8.decoder).join();
     Map dataDict = json.decode(responseBody);
@@ -49,25 +51,30 @@ class _HomePageState extends State<HomePage> {
 
   void requestDataAndReload() async {
     List<NewsListItemModel> models = await getNewsList();
-    if(models.length < pageItemNum) isCanLoadMore = false;
     
-    print('zhoukang===>$models');
     setState(() {
+      if(models.length < pageItemNum) isPageMore = false;
+
+      pageCursor++;
       newsList.addAll(models);
     });
   }
 
   @override
   void initState() {
-    print('zhoukang===>test');
     super.initState();
   
     requestDataAndReload();
+
     scrollCtl.addListener(() {
       var _scrollTop    = scrollCtl.position.pixels;
       var _scrollHeight = scrollCtl.position.maxScrollExtent;
-      
+      print("scrolltop: $_scrollTop, scrollHeight: $_scrollHeight");
       if(_scrollTop >= _scrollHeight - 20) {
+        Timer(const Duration(seconds: 1), () {
+          print('homepage context: $context');
+          Toast.tips(context, msg: 'Pull down to load more...', position: ToastPostion.bottom);
+        });
         requestDataAndReload();
       }
       
@@ -113,7 +120,10 @@ class _HomePageState extends State<HomePage> {
           decoration: BoxDecoration(
             color: Colors.green,
             borderRadius: BorderRadius.circular(5.0),
-            image: DecorationImage(
+            image: model.imgUrlString.isEmpty ? const DecorationImage(
+              image:  AssetImage('images/test.jpg'),
+              fit: BoxFit.cover
+            ) : DecorationImage (
               image: NetworkImage(model.imgUrlString),
               fit: BoxFit.cover
             )
@@ -124,12 +134,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _onRefresh() async {
+    print("Draw up to refresh");
     await Future.delayed(
         const Duration(
             milliseconds: 2000), () {
-              newsList = [];
-              page = 1;
-              getNewsList();
+              newsList   = [];
+              pageCursor = 1;
+              requestDataAndReload();
       });
   }
 
@@ -137,9 +148,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(      
-        title: const Text(ConstantUtil.AppTitle),
+        title: const Text(PoemConstant.appTitle),
       ),
-      body: newsList.isNotEmpty ? RefreshIndicator(
+      body: newsList.length >= pageItemNum ? RefreshIndicator(
         child: ListView.builder(
                   controller: scrollCtl,
                   itemCount: newsList.length,
@@ -156,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
         onRefresh: _onRefresh
-      ) : getMoreTips(flag: isCanLoadMore)
+      ) : getMoreTips(flag: isPageMore)
     );
   }
 }
@@ -171,7 +182,7 @@ class getMoreTips extends StatelessWidget {
       child: flag ? Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const <Widget>[
-          Text('loading...'),
+          Text('loading233...'),
           SizedBox(width: 10),
           CircularProgressIndicator(strokeWidth: 2)
         ],

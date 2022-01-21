@@ -15,7 +15,7 @@ class NewsListItemModel {
     NewsListItemModel model = NewsListItemModel(
       title: map['itemTitle'] ?? 'DefaultNewsItemTitle',
       publishDate: DateTime.fromMillisecondsSinceEpoch(int.parse(map['pubDate'])),
-      imgUrlString: (map['itemImageNew'] as List).length > 0 ? ((map['itemImageNew'] as List).first as Map)['imgUrl'] : ''
+      imgUrlString: (map['itemImageNew'] as List).isNotEmpty ? ((map['itemImageNew'] as List).first as Map)['imgUrl'] : ''
     );
     
     return model;
