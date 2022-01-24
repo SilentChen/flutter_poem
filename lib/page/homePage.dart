@@ -25,30 +25,17 @@ class _HomePageState extends State<HomePage> {
   
   Future<List<NewsListItemModel>> getNewsList() async {
     if(!isPageMore) return [];
-    
-    // HttpClient network = HttpClient();    
-    // Uri uri = Uri(
-    //     scheme: 'http',
-    //     host: 'api.cportal.cctv.com',
-    //     path: '/api/rest/navListInfo/getHandDataListInfoNew',
-    //     query: 'id=Nav-9Nwml0dIB6wAxgd9EfZA160510&toutuNum=5&version=1&p=$pageCursor&n=$pageItemNum');
-    // 
-    // // http://api.cportal.cctv.com/api/rest/navListInfo/getHandDataListInfoNew?id=Nav-9Nwml0dIB6wAxgd9EfZA160510&toutuNum=5&version=1&p=1&n=20
-    // print('Uri: $uri');
-    // HttpClientRequest request   = await network.getUrl(uri);
-    // HttpClientResponse response = await request.close();
-    // var responseBody = await response.transform(utf8.decoder).join();
-    // Map dataDict = json.decode(responseBody);
-    // List rawDatas = dataDict['itemList'] as List;
-    
-    // List<NewsListItemModel> models = rawDatas.map((map) {
-    //   map = map as Map;
-    //   NewsListItemModel model = NewsListItemModel.fromDict(map);
-    //   return model;
-    // }).toList();
 
     Dio dio = Dio();
     dio.options.responseType = ResponseType.json;
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options) {
+        Alert.loading();
+      },
+      onResponse: (options) {
+        Alert.triggerStopShowing();
+      }
+    ));
     Response response = await dio.get('http://api.cportal.cctv.com/api/rest/navListInfo/getHandDataListInfoNew?id=Nav-9Nwml0dIB6wAxgd9EfZA160510&toutuNum=5&version=1&p=$pageCursor&n=$pageItemNum');
     List dataList= response.data['itemList'] as List;
     List<NewsListItemModel> models = dataList.map((paramMap) {
@@ -62,11 +49,11 @@ class _HomePageState extends State<HomePage> {
 
   void requestDataAndReload() async {
     List<NewsListItemModel> models = await getNewsList();
-    
+
     setState(() {
       if(models.length < pageItemNum) isPageMore = false;
 
-      pageCursor++;
+      pageCursor++;      
       newsList.addAll(models);
     });
   }
@@ -81,10 +68,7 @@ class _HomePageState extends State<HomePage> {
       var _scrollTop    = scrollCtl.position.pixels;
       var _scrollHeight = scrollCtl.position.maxScrollExtent;
       if(_scrollTop >= _scrollHeight - 20) {
-        
-        Alert.loadingmsg(context);
         requestDataAndReload();
-        Future.delayed(const Duration(milliseconds: 1000), Alert.triggerStopShowing());
       }
       
     });
@@ -155,6 +139,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Alert.ctx = context;
     return Scaffold(
       appBar: AppBar(      
         title: const Text(PoemConstant.appTitle),

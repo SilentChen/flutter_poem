@@ -1,277 +1,176 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/style.dart';
 
-//alert 显示位置控制 
-enum AlertPostion {
+enum AlertPosition {
   top,
   center,
   bottom,
 }
 
 class Alert {
-  // alert靠它加到屏幕上
-  static late OverlayEntry _overlayEntry;
-  // alert是否正在showing
   static bool _showing = false;
-  // 开启一个新alert的当前时间，用于对比是否已经展示了足够时间
-  static late DateTime _startedTime;
-  // 提示内容
-  static late String _msg;
-  // alert显示时间
-  static late int _showTime;
-  // 背景颜色
-  static late Color _bgColor;
-  // 文本颜色
-  static late Color _textColor;
-  // 文字大小
-  static late double _textSize;
-  // 显示位置
-  static late AlertPostion _alertPosition;
-  // 左右边距
-  static late double _pdHorizontal;
-  // 上下边距
-  static late double _pdVertical;
+  static OverlayEntry? _overlayEntry;
+  static dynamic ctx;
 
-  static triggerStopShowing() async {
+  static triggerStopShowing() {
+    _stopShowing(_overlayEntry!);
+  }
+
+  static _stopShowing(OverlayEntry overlayEntry) async {
     if(!_showing) {
       return;
     }
 
     _showing = false;
-    _overlayEntry.markNeedsBuild();
+    overlayEntry.markNeedsBuild();
     await Future.delayed(const Duration(milliseconds: 400));
-    _overlayEntry.remove();
-    //_overlayEntry = null as OverlayEntry;
+    overlayEntry.remove();
   }
 
-  static void loading(BuildContext context, {
-    int showTime = 1000,
-    AlertPostion position = AlertPostion.center
+  static void loading({
+    int showingDuration = 1000,                     // unit, millisecond
+    AlertPosition position = AlertPosition.center
   }) async {
-    if(_showing) return;
-    
-    _startedTime = DateTime.now();
-    _showTime = showTime;
-    _alertPosition = position;
-
-    OverlayState? overlayState = Overlay.of(context);
-    _showing = true;
-
-    _overlayEntry = OverlayEntry(
-          builder: (BuildContext context) => Positioned(
-                //top值，可以改变这个值来改变alert在屏幕中的位置
-                top: calcPosition(context),
-                child: Container(
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                      child: AnimatedOpacity(
-                        opacity: _showing ? 1.0 : 0.0, //目标透明度
-                        duration: _showing
-                            ? const Duration(milliseconds: 100)
-                            : const Duration(milliseconds: 300),
-                        child: _buildLoadingWidget(),
-                      ),
-                    )),
-              ));
-      //插入到整个布局的最上层
-    overlayState!.insert(_overlayEntry);
-    await Future.delayed(Duration(milliseconds: _showTime));
-    //2秒后 到底消失不消失
-    if (DateTime.now().difference(_startedTime).inMilliseconds >= _showTime) {
-      triggerStopShowing();
-    }
-
+    Widget loadingWidget = Center(child: Column(children: const [CircularProgressIndicator()]));
+    _render(
+      ctx, 
+      targetWidget: loadingWidget,
+      showingDuration: showingDuration,
+      position: position
+    );
   }
 
-  static void loadingmsg(BuildContext context, {
+  static void loadingmsg({
     String msg = 'loading',
-    int showTime = 1000,
-    AlertPostion position = AlertPostion.center
+    int showingDuration = 1000,
+    AlertPosition position = AlertPosition.center
   }) async {
-    if(_showing) return;
     
-    _msg = msg;
-    _startedTime = DateTime.now();
-    _showTime = showTime;
-    _alertPosition = position;
-
-    OverlayState? overlayState = Overlay.of(context);
-    _showing = true;
-
-    _overlayEntry = OverlayEntry(
-          builder: (BuildContext context) => Positioned(
-                //top值，可以改变这个值来改变alert在屏幕中的位置
-                top: calcPosition(context),
-                child: Container(
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                      child: AnimatedOpacity(
-                        opacity: _showing ? 1.0 : 0.0, //目标透明度
-                        duration: _showing
-                            ? const Duration(milliseconds: 100)
-                            : const Duration(milliseconds: 300),
-                        child: _buildLoadingMsgWidget(),
-                      ),
-                    )),
-              ));
-      //插入到整个布局的最上层
-    overlayState!.insert(_overlayEntry);
-    await Future.delayed(Duration(milliseconds: _showTime));
-    //2秒后 到底消失不消失
-    if (DateTime.now().difference(_startedTime).inMilliseconds >= _showTime) {
-      triggerStopShowing();
-    }
-
+  Widget loadingmsgWidget = Center(
+        child: Opacity(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(msg, 
+                style: const TextStyle(
+                  fontSize: 16, 
+                  color: Colors.black, 
+                  fontWeight: FontWeight.normal, 
+                  decoration: TextDecoration.none
+                )
+              ),
+              const SizedBox(width: 10),
+              const CircularProgressIndicator(strokeWidth: 2)
+            ],
+          ),
+          opacity: 0.5,
+        ),
+      );
+    _render(
+      ctx, 
+      targetWidget: loadingmsgWidget,
+      showingDuration: showingDuration,
+      position: position
+    );
   }
 
-  static void tips(
-    BuildContext context, {
-    //显示的文本
+  static void tips({
     required String msg,
-    //显示的时间 单位毫秒
-    int showTime = 1000,
-    //显示的背景
+    int showingDuration = 1000,
     Color bgColor = Colors.black,
-    //显示的文本颜色
     Color textColor = Colors.white,
-    //显示的文字大小
     double textSize = 14.0,
-    //显示的位置
-    AlertPostion position = AlertPostion.center,
-    //文字水平方向的内边距
+    AlertPosition position = AlertPosition.center,
     double pdHorizontal = 20.0,
-    //文字垂直方向的内边距
     double pdVertical = 10.0,
   }) async {
-    if(_showing) return;
-
-    //assert(msg != null);
-    _msg = msg;
-    _startedTime = DateTime.now();
-    _showTime = showTime;
-    _bgColor = bgColor;
-    _textColor = textColor;
-    _textSize = textSize;
-    _alertPosition = position;
-    _pdHorizontal = pdHorizontal;
-    _pdVertical = pdVertical;
-    //获取OverlayState
-    OverlayState? overlayState = Overlay.of(context);
-    _showing = true;
-
-    //if (null == _overlayEntry) {
-      //print('context: $context, overlayState: $overlayState');
-      //OverlayEntry负责构建布局
-      //通过OverlayEntry将构建的布局插入到整个布局的最上层
-      _overlayEntry = OverlayEntry(
-          builder: (BuildContext context) => Positioned(
-                //top值，可以改变这个值来改变alert在屏幕中的位置
-                top: calcPosition(context),
-                child: Container(
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                      child: AnimatedOpacity(
-                        opacity: _showing ? 1.0 : 0.0, //目标透明度
-                        duration: _showing
-                            ? const Duration(milliseconds: 100)
-                            : const Duration(milliseconds: 300),
-                        child: _buildTipsWidget(),
-                      ),
-                    )),
-              ));
-      //插入到整个布局的最上层
-      overlayState!.insert(_overlayEntry);
-    //} else {
-      //重新绘制UI，类似setState
-    //  _overlayEntry.markNeedsBuild();
-    //}
-    // 等待时间
-    await Future.delayed(Duration(milliseconds: _showTime));
-    //2秒后 到底消失不消失
-    if (DateTime.now().difference(_startedTime).inMilliseconds >= _showTime) {
-      triggerStopShowing();
-      
-    }
-  }
-
-  static _buildLoadingWidget() {
-    return Center(
-      child: Column(
-        children: const [
-          CircularProgressIndicator()
-        ],
-      ),
-    );
-  }
-
-  static _buildLoadingMsgWidget() {
-    return Center(
-      child: Opacity(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(_msg, 
-              style: const TextStyle(
-                fontSize: 16, 
-                color: Colors.black, 
-                fontWeight: FontWeight.normal, 
-                decoration: TextDecoration.none
-              )
-            ),
-            const SizedBox(width: 10),
-            const CircularProgressIndicator(strokeWidth: 2)
-          ],
-        ),
-        opacity: 0.5,
-      ),
-    );
-  }
-
-  //alert绘制
-  static _buildTipsWidget() {
-
-    return Center(
+    Widget tipsWidget = Center(
       child: Column(
         children: [
           Card(
-            color: _bgColor,
+            color: bgColor,
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: _pdHorizontal, vertical: _pdVertical),
+                horizontal: pdHorizontal,
+                vertical: pdVertical
+              ),
               child: Text(
-                _msg,
+                msg,
                 style: TextStyle(
-                  fontSize: _textSize,
-                  color: _textColor,
+                  fontSize: textSize,
+                  color: textColor
                 ),
               ),
             ),
-          ),
+          )
         ],
-      )
+      ),
+    );
+    _render(
+      ctx, 
+      targetWidget: tipsWidget,
+      showingDuration: showingDuration,
+      position: position
     );
   }
 
-//  设置alert位置
-  static calcPosition(context) {
-
-    var backResult;
-    if (_alertPosition == AlertPostion.top) {
-      backResult = MediaQuery.of(context).size.height * 1 / 4;
-    } else if (_alertPosition == AlertPostion.center) {
-      backResult = MediaQuery.of(context).size.height * 2 / 5;
-    } else {
-      backResult = MediaQuery.of(context).size.height * 3 / 4;
+  static Future<OverlayEntry?> _render(ctx, {
+    int showingDuration = 1000,
+    AlertPosition position = AlertPosition.center,
+    required Widget targetWidget,
+  }) async {
+    if(_showing) {
+      return null;
     }
-    return backResult;
+
+    OverlayState? overlayState = Overlay.of(ctx);
+    if(null != overlayState) {
+      DateTime startedTime = DateTime.now();
+      _showing = true;
+      OverlayEntry overlayEntry = _overlayEntryWidget(ctx, position, targetWidget);
+      _overlayEntry = overlayEntry;
+      overlayState.insert(overlayEntry);
+      await Future.delayed(Duration(milliseconds: showingDuration),(){
+        if (DateTime.now().difference(startedTime).inMilliseconds >= showingDuration) {
+          _stopShowing(overlayEntry);
+        }
+      });
+      
+      return overlayEntry;
+    }
+    return null;
+  }
+
+  static _overlayEntryWidget(ctx, AlertPosition position, Widget targetWidget) {
+    double positionTopValue;
+    if (position == AlertPosition.top) {
+      positionTopValue = MediaQuery.of(ctx).size.height * 1 / 4;
+    } else if (position == AlertPosition.center) {
+      positionTopValue = MediaQuery.of(ctx).size.height * 2 / 5;
+    } else {
+      positionTopValue = MediaQuery.of(ctx).size.height * 3 / 4;
+    }
+
+    return OverlayEntry(
+          builder: (BuildContext context) => Positioned(
+            top: positionTopValue,
+            child: Container(
+              alignment: Alignment.center,
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                child: AnimatedOpacity(
+                  opacity: 0.5
+                  , duration: _showing 
+                  ? const Duration(microseconds: 100) 
+                  : const Duration(microseconds: 300),
+                  child: targetWidget
+                ),
+              ),
+            ),
+          )
+        );
   }
 }
 
