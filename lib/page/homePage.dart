@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_poem/component/toastComponent.dart';
-import 'package:flutter_poem/models/NewsListItemModel.dart';
+import 'package:flutter_poem/component/alertComponent.dart';
+import 'package:flutter_poem/models/newsListItemModel.dart';
 import 'package:flutter_poem/util/poemConstantUtil.dart';
 
 
@@ -26,26 +26,37 @@ class _HomePageState extends State<HomePage> {
   Future<List<NewsListItemModel>> getNewsList() async {
     if(!isPageMore) return [];
     
-    HttpClient network = HttpClient();    
-    Uri uri = Uri(
-        scheme: 'http',
-        host: 'api.cportal.cctv.com',
-        path: '/api/rest/navListInfo/getHandDataListInfoNew',
-        query: 'id=Nav-9Nwml0dIB6wAxgd9EfZA160510&toutuNum=5&version=1&p=$pageCursor&n=$pageItemNum');        
+    // HttpClient network = HttpClient();    
+    // Uri uri = Uri(
+    //     scheme: 'http',
+    //     host: 'api.cportal.cctv.com',
+    //     path: '/api/rest/navListInfo/getHandDataListInfoNew',
+    //     query: 'id=Nav-9Nwml0dIB6wAxgd9EfZA160510&toutuNum=5&version=1&p=$pageCursor&n=$pageItemNum');
+    // 
+    // // http://api.cportal.cctv.com/api/rest/navListInfo/getHandDataListInfoNew?id=Nav-9Nwml0dIB6wAxgd9EfZA160510&toutuNum=5&version=1&p=1&n=20
+    // print('Uri: $uri');
+    // HttpClientRequest request   = await network.getUrl(uri);
+    // HttpClientResponse response = await request.close();
+    // var responseBody = await response.transform(utf8.decoder).join();
+    // Map dataDict = json.decode(responseBody);
+    // List rawDatas = dataDict['itemList'] as List;
     
-    print('Uri: $uri');
-    HttpClientRequest request   = await network.getUrl(uri);
-    HttpClientResponse response = await request.close();
-    var responseBody = await response.transform(utf8.decoder).join();
-    Map dataDict = json.decode(responseBody);
-    List rawDatas = dataDict['itemList'] as List;
-    
-    List<NewsListItemModel> models = rawDatas.map((map) {
-      map = map as Map;
-      NewsListItemModel model = NewsListItemModel.fromDict(map);
+    // List<NewsListItemModel> models = rawDatas.map((map) {
+    //   map = map as Map;
+    //   NewsListItemModel model = NewsListItemModel.fromDict(map);
+    //   return model;
+    // }).toList();
+
+    Dio dio = Dio();
+    dio.options.responseType = ResponseType.json;
+    Response response = await dio.get('http://api.cportal.cctv.com/api/rest/navListInfo/getHandDataListInfoNew?id=Nav-9Nwml0dIB6wAxgd9EfZA160510&toutuNum=5&version=1&p=$pageCursor&n=$pageItemNum');
+    List dataList= response.data['itemList'] as List;
+    List<NewsListItemModel> models = dataList.map((paramMap) {
+      paramMap = paramMap as Map;
+      NewsListItemModel model = NewsListItemModel.fromDict(paramMap);
       return model;
     }).toList();
-      
+    
     return models;
   }
 
@@ -65,17 +76,15 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   
     requestDataAndReload();
-
+    
     scrollCtl.addListener(() {
       var _scrollTop    = scrollCtl.position.pixels;
       var _scrollHeight = scrollCtl.position.maxScrollExtent;
-      print("scrolltop: $_scrollTop, scrollHeight: $_scrollHeight");
       if(_scrollTop >= _scrollHeight - 20) {
-        Timer(const Duration(seconds: 1), () {
-          print('homepage context: $context');
-          Toast.tips(context, msg: 'Pull down to load more...', position: ToastPostion.bottom);
-        });
+        
+        Alert.loadingmsg(context);
         requestDataAndReload();
+        Future.delayed(const Duration(milliseconds: 1000), Alert.triggerStopShowing());
       }
       
     });
@@ -182,7 +191,7 @@ class getMoreTips extends StatelessWidget {
       child: flag ? Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const <Widget>[
-          Text('loading233...'),
+          Text('loading...'),
           SizedBox(width: 10),
           CircularProgressIndicator(strokeWidth: 2)
         ],
