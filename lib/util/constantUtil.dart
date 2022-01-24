@@ -1,5 +1,5 @@
 
-class PoemConstant {
+class Constant {
   static const appTitle = "Poem";
   static const tokenName= 'token';
   static const dioConnectTimeout = 15000;

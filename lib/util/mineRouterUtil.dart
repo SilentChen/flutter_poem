@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_poem/page/homePage.dart';
 import 'package:flutter_poem/page/searchPage.dart';
 import 'package:flutter_poem/page/minePage.dart';
+import 'package:flutter_poem/util/globalUtil.dart';
 
-class PoemRouter extends StatefulWidget {
-  const PoemRouter({Key? key}) : super(key: key);
+class MineRouter extends StatefulWidget {
+  const MineRouter({Key? key}) : super(key: key);
 
   @override
-  State<PoemRouter> createState() => _PoemRouterState();
+  State<MineRouter> createState() => _MineRouterState();
 }
 
-class _PoemRouterState extends State<PoemRouter> {
+class _MineRouterState extends State<MineRouter> {
   
   final List<BottomNavigationBarItem> bottomNavBarItems = [
     const BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), label: 'Home')
@@ -38,6 +39,7 @@ class _PoemRouterState extends State<PoemRouter> {
   
   @override
   Widget build(BuildContext context) {
+    Global.context = context;
     return Scaffold(
       backgroundColor: const Color.fromRGBO(244, 245, 245, 1.0)
       , bottomNavigationBar: BottomNavigationBar(

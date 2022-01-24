@@ -1,56 +1,61 @@
 import 'dart:convert';
-import 'dart:js';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_poem/component/alertComponent.dart';
-import 'package:flutter_poem/util/poemConstantUtil.dart';
+import 'package:flutter_poem/util/constantUtil.dart';
 
 var dio = Dio();
 
-poemInterceptors () async {
+mineInterceptors () async {
   dio.options.baseUrl = '';
-  dio.options.connectTimeout = PoemConstant.dioConnectTimeout;
-  dio.options.receiveTimeout = PoemConstant.dioReceiveTimeout;
+  dio.options.responseType   = ResponseType.json;
+  dio.options.connectTimeout = Constant.dioConnectTimeout;
+  dio.options.receiveTimeout = Constant.dioReceiveTimeout;
 
   dio.interceptors.add(
     InterceptorsWrapper(
       onRequest: (options) {
-        Alert.loadingmsg();
+        Alert.loadingmsg(position: AlertPosition.bottom, showingDuration: 0);
       },
       onResponse: (options) {
         Alert.triggerStopShowing();
       },
       onError: (error) {
-
+        Alert.triggerStopShowing();
       }
     )
   );
 }
 
 class DioHandler {
-  static get (url, {queryParameters, success = '', error = '', headers = '', requests = '', statusCodes = ''}) async{
-    poemInterceptors();
+
+  static setBaseUrl(String url) {
+    dio.options.baseUrl = url;
+  }
+  
+  static get (url, {queryParameters, headers = '', requests = '', successCallback = '', errorCallback = ''}) async{
+    mineInterceptors();
     try{
-      var response = await dio.get(dio.options.baseUrl + url, queryParameters: queryParameters ?? {});
-      if(headers != '') {headers(response.headers);}
-      if(requests != '') {requests(response.request);}
-      if(statusCodes != '') {statusCodes(response.statusCode);}
+      Response response = await dio.get(dio.options.baseUrl + url, queryParameters: queryParameters ?? {});
+
+      if(headers != '')  { headers(response.headers); }
+      if(requests != '') { requests(response.request); }
 
       if(response.statusCode == 200) {
-        var res = json.decode(response.data)['result'];
-        if(success != '') {success(res);}
+        if(successCallback != '') { successCallback(response); }
+        return response;
       } else {
-        if(error != '') {error(response);}
-        throw Exception('erroor: $response');
+        if(errorCallback != '') { errorCallback(response); }
+        throw Exception('statusCodeError: $response');
       }
     } on DioError catch (e) {
       formatError(e);
-      throw Exception('erroor: $e');
+      throw Exception('dioExcetionError: $e');
     }
   }
 
   static post (url, {data, success = '', error = '', headers = '', requests = '', statusCodes = '', onSendProgress}) async{
-    poemInterceptors();
+    mineInterceptors();
     try{
       var response = await dio.post(dio.options.baseUrl + url, data: data ?? {}, onSendProgress: onSendProgress ?? () {});
 
@@ -72,7 +77,7 @@ class DioHandler {
   }
 
   static download (url, saveUrl, {success, error, onReceiveProgress}) async{
-    poemInterceptors();
+    mineInterceptors();
     try{
       var response = await dio.download(dio.options.baseUrl + url, saveUrl, onReceiveProgress: onReceiveProgress ?? () {});
 
@@ -90,11 +95,7 @@ class DioHandler {
   }
 
   static formData (url, data, {success, error}) async{
-    poemInterceptors();
-//    var formData = FormData.fromMap({
-//      'name': 'wendux',
-//      'age': 25,
-//    });
+    mineInterceptors();
     try{
       var response = await dio.post(dio.options.baseUrl + url, data: data ?? {});
 

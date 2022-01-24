@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_poem/util/globalUtil.dart';
 
 enum AlertPosition {
   top,
@@ -11,7 +12,6 @@ enum AlertPosition {
 class Alert {
   static bool _showing = false;
   static OverlayEntry? _overlayEntry;
-  static dynamic ctx;
 
   static triggerStopShowing() {
     _stopShowing(_overlayEntry!);
@@ -34,14 +34,14 @@ class Alert {
   }) async {
     Widget loadingWidget = Center(child: Column(children: const [CircularProgressIndicator()]));
     _render(
-      ctx, 
+      Global.context, 
       targetWidget: loadingWidget,
       showingDuration: showingDuration,
       position: position
     );
   }
 
-  static void loadingmsg({
+  static Future<OverlayEntry?> loadingmsg({
     String msg = 'loading',
     int showingDuration = 1000,
     AlertPosition position = AlertPosition.center
@@ -68,7 +68,7 @@ class Alert {
         ),
       );
     _render(
-      ctx, 
+      Global.context, 
       targetWidget: loadingmsgWidget,
       showingDuration: showingDuration,
       position: position
@@ -108,7 +108,7 @@ class Alert {
       ),
     );
     _render(
-      ctx, 
+      Global.context, 
       targetWidget: tipsWidget,
       showingDuration: showingDuration,
       position: position
@@ -116,13 +116,14 @@ class Alert {
   }
 
   static Future<OverlayEntry?> _render(ctx, {
-    int showingDuration = 1000,
-    AlertPosition position = AlertPosition.center,
+    required int showingDuration,
+    required AlertPosition position,
     required Widget targetWidget,
   }) async {
     if(_showing) {
+      //triggerStopShowing();
       return null;
-    }
+    } 
 
     OverlayState? overlayState = Overlay.of(ctx);
     if(null != overlayState) {
@@ -131,11 +132,14 @@ class Alert {
       OverlayEntry overlayEntry = _overlayEntryWidget(ctx, position, targetWidget);
       _overlayEntry = overlayEntry;
       overlayState.insert(overlayEntry);
-      await Future.delayed(Duration(milliseconds: showingDuration),(){
-        if (DateTime.now().difference(startedTime).inMilliseconds >= showingDuration) {
-          _stopShowing(overlayEntry);
-        }
-      });
+      
+      if(showingDuration <= 0) {
+        await Future.delayed(Duration(milliseconds: showingDuration),(){
+          if (DateTime.now().difference(startedTime).inMilliseconds >= showingDuration) {
+            _stopShowing(overlayEntry);
+          }
+        });
+      }
       
       return overlayEntry;
     }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_poem/util/poemRouterUtil.dart';
+import 'package:flutter_poem/util/mineRouterUtil.dart';
 
 //void main() => runApp(PoemApp());
 void main() {
@@ -17,7 +17,7 @@ class PoemApp extends StatelessWidget {
       theme: ThemeData(        
         primarySwatch: Colors.blue,
       ),
-      home: const PoemRouter()
+      home: const MineRouter()
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_poem/util/poemConstantUtil.dart';
+import 'package:flutter_poem/util/constantUtil.dart';
+import 'package:flutter_poem/util/dioHandlerUtil.dart';
 
 class MinePage extends StatefulWidget {
   const MinePage({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class _MinePageState extends State<MinePage> {
 
   void _incrementCounter() {
     setState(() {
+      DioHandler.get('http://www.baidu.com');
       _counter++;
     });
   }
@@ -24,7 +26,7 @@ class _MinePageState extends State<MinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(      
-        title: const Text(PoemConstant.appTitle),
+        title: const Text(Constant.appTitle),
       ),
       body: Center(
         child: Column(         

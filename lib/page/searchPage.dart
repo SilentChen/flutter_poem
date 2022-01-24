@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_poem/util/poemConstantUtil.dart';
+import 'package:flutter_poem/component/alertComponent.dart';
+import 'package:flutter_poem/util/constantUtil.dart';
+import 'package:flutter_poem/util/globalUtil.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key? key}) : super(key: key);
@@ -64,10 +66,11 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    Alert.tips(msg: 'test');
     // ignore: unnecessary_new
     return new Scaffold(
       appBar: AppBar(
-        title: const Text(PoemConstant.appTitle),
+        title: const Text(Constant.appTitle),
       ),
       body: SingleChildScrollView(
         child: Html(

@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_poem/component/alertComponent.dart';
 import 'package:flutter_poem/models/newsListItemModel.dart';
-import 'package:flutter_poem/util/poemConstantUtil.dart';
+import 'package:flutter_poem/util/constantUtil.dart';
+import 'package:flutter_poem/util/dioHandlerUtil.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -26,17 +26,7 @@ class _HomePageState extends State<HomePage> {
   Future<List<NewsListItemModel>> getNewsList() async {
     if(!isPageMore) return [];
 
-    Dio dio = Dio();
-    dio.options.responseType = ResponseType.json;
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options) {
-        Alert.loading();
-      },
-      onResponse: (options) {
-        Alert.triggerStopShowing();
-      }
-    ));
-    Response response = await dio.get('http://api.cportal.cctv.com/api/rest/navListInfo/getHandDataListInfoNew?id=Nav-9Nwml0dIB6wAxgd9EfZA160510&toutuNum=5&version=1&p=$pageCursor&n=$pageItemNum');
+    Response response = await DioHandler.get('http://api.cportal.cctv.com/api/rest/navListInfo/getHandDataListInfoNew?id=Nav-9Nwml0dIB6wAxgd9EfZA160510&toutuNum=5&version=1&p=$pageCursor&n=$pageItemNum');
     List dataList= response.data['itemList'] as List;
     List<NewsListItemModel> models = dataList.map((paramMap) {
       paramMap = paramMap as Map;
@@ -139,12 +129,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Alert.ctx = context;
     return Scaffold(
       appBar: AppBar(      
-        title: const Text(PoemConstant.appTitle),
+        title: const Text(Constant.appTitle),
       ),
-      body: newsList.length >= pageItemNum ? RefreshIndicator(
+      body: RefreshIndicator(
         child: ListView.builder(
                   controller: scrollCtl,
                   itemCount: newsList.length,
@@ -161,32 +150,7 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
         onRefresh: _onRefresh
-      ) : getMoreTips(flag: isPageMore)
-    );
-  }
-}
-
-class getMoreTips extends StatelessWidget {
-  var flag = true;
-  getMoreTips({Key? key, required this.flag}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: flag ? Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const <Widget>[
-          Text('loading...'),
-          SizedBox(width: 10),
-          CircularProgressIndicator(strokeWidth: 2)
-        ],
-      ) : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text('NoMoreData...'),
-            SizedBox(height: 10),
-          ],
-      ),
+      )
     );
   }
 }
