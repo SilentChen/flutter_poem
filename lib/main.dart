@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_poem/util/mineRouterUtil.dart';
+import 'package:one_context/one_context.dart';
 
 //void main() => runApp(PoemApp());
 void main() {
   runApp(const PoemApp());
 }
+
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
 class PoemApp extends StatelessWidget {
   const PoemApp({Key? key}) : super(key: key);
@@ -17,6 +20,8 @@ class PoemApp extends StatelessWidget {
       theme: ThemeData(        
         primarySwatch: Colors.blue,
       ),
+      builder: OneContext().builder,
+      navigatorKey: OneContext().key,
       home: const MineRouter()
     );
   }

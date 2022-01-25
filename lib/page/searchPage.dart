@@ -65,8 +65,13 @@ const htmlData = """
 class _SearchPageState extends State<SearchPage> {
 
   @override
+  void initState() {
+    super.initState();
+    Alert.tips(msg: 'searchPageTipsTest');
+  }
+  
+  @override
   Widget build(BuildContext context) {
-    Alert.tips(msg: 'test');
     // ignore: unnecessary_new
     return new Scaffold(
       appBar: AppBar(

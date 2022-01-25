@@ -18,7 +18,7 @@ class Alert {
   }
 
   static _stopShowing(OverlayEntry overlayEntry) async {
-    if(!_showing) {
+    if(!_showing && null == _overlayEntry) {
       return;
     }
 
@@ -34,7 +34,7 @@ class Alert {
   }) async {
     Widget loadingWidget = Center(child: Column(children: const [CircularProgressIndicator()]));
     _render(
-      Global.context, 
+      Global.getContext(), 
       targetWidget: loadingWidget,
       showingDuration: showingDuration,
       position: position
@@ -68,7 +68,7 @@ class Alert {
         ),
       );
     _render(
-      Global.context, 
+      Global.getContext(), 
       targetWidget: loadingmsgWidget,
       showingDuration: showingDuration,
       position: position
@@ -108,7 +108,7 @@ class Alert {
       ),
     );
     _render(
-      Global.context, 
+      Global.getContext(), 
       targetWidget: tipsWidget,
       showingDuration: showingDuration,
       position: position
@@ -133,7 +133,7 @@ class Alert {
       _overlayEntry = overlayEntry;
       overlayState.insert(overlayEntry);
       
-      if(showingDuration <= 0) {
+      if(showingDuration > 0) {
         await Future.delayed(Duration(milliseconds: showingDuration),(){
           if (DateTime.now().difference(startedTime).inMilliseconds >= showingDuration) {
             _stopShowing(overlayEntry);

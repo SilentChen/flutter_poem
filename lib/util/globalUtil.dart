@@ -1,3 +1,8 @@
+import 'package:flutter/cupertino.dart';
+import 'package:one_context/one_context.dart';
+
 class Global {
-  static dynamic context;
+  static getContext() {
+    return OneContext().context;
+  }
 }

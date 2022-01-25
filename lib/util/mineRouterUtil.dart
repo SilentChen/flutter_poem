@@ -39,7 +39,6 @@ class _MineRouterState extends State<MineRouter> {
   
   @override
   Widget build(BuildContext context) {
-    Global.context = context;
     return Scaffold(
       backgroundColor: const Color.fromRGBO(244, 245, 245, 1.0)
       , bottomNavigationBar: BottomNavigationBar(

@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_poem/main.dart';
 import 'package:flutter_poem/models/newsListItemModel.dart';
 import 'package:flutter_poem/util/constantUtil.dart';
 import 'package:flutter_poem/util/dioHandlerUtil.dart';
+import 'package:flutter_poem/util/globalUtil.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -39,11 +41,11 @@ class _HomePageState extends State<HomePage> {
 
   void requestDataAndReload() async {
     List<NewsListItemModel> models = await getNewsList();
+    pageCursor++;
 
     setState(() {
       if(models.length < pageItemNum) isPageMore = false;
 
-      pageCursor++;      
       newsList.addAll(models);
     });
   }
@@ -72,7 +74,12 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(model.title, style: const TextStyle(fontSize: 15.0, color: Color(0xff111111)), maxLines: 3, overflow: TextOverflow.ellipsis),
+              Text(model.title,
+                  style: const TextStyle(fontSize: 15.0,
+                  color: Color(0xff111111)),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis
+              ),
               Container(
                 width: 50.0,
                 height: 20.0,
@@ -142,8 +149,14 @@ class _HomePageState extends State<HomePage> {
                       height: 115.0,
                       child: Column(
                         children: <Widget>[
-                          Container(padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0), child: _cellContentView(newsList[index])),
-                          Container(margin: const EdgeInsets.only(top: 4.0), color: const Color(0xffeaeaea), constraints: const BoxConstraints.expand(height: 4.0))
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+                             child: _cellContentView(newsList[index]),
+                            ),
+                          Container(margin: const EdgeInsets.only(top: 4.0),
+                           color: const Color(0xffeaeaea),
+                           constraints: const BoxConstraints.expand(height: 4.0),
+                          )
                         ],
                       ),
                     );
