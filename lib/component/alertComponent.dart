@@ -18,7 +18,7 @@ class Alert {
   }
 
   static _stopShowing(OverlayEntry overlayEntry) async {
-    if(!_showing && null == _overlayEntry) {
+    if(!_showing || null == _overlayEntry) {
       return;
     }
 

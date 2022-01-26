@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_poem/main.dart';
 import 'package:flutter_poem/models/newsListItemModel.dart';
 import 'package:flutter_poem/util/constantUtil.dart';
 import 'package:flutter_poem/util/dioHandlerUtil.dart';
@@ -19,6 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   
+  bool reqlock = false;
   int pageCursor  = 1;
   int pageItemNum = 20;
   bool isPageMore = true;
@@ -26,9 +26,15 @@ class _HomePageState extends State<HomePage> {
   var scrollCtl = ScrollController();
   
   Future<List<NewsListItemModel>> getNewsList() async {
-    if(!isPageMore) return [];
+    if(!isPageMore || reqlock) return [];
 
-    Response response = await DioHandler.get('http://api.cportal.cctv.com/api/rest/navListInfo/getHandDataListInfoNew?id=Nav-9Nwml0dIB6wAxgd9EfZA160510&toutuNum=5&version=1&p=$pageCursor&n=$pageItemNum');
+    Response response = await DioHandler.get('http://api.cportal.cctv.com/api/rest/navListInfo/getHandDataListInfoNew?id=Nav-9Nwml0dIB6wAxgd9EfZA160510&toutuNum=5&version=1&p=$pageCursor&n=$pageItemNum',
+      onRequestCallback: (params) {reqlock = true;},
+      onResponseCallback:(params){reqlock = false;},
+      onErrorCallback:   (params){reqlock = false;},
+    );
+    
+    print(pageCursor);
     List dataList= response.data['itemList'] as List;
     List<NewsListItemModel> models = dataList.map((paramMap) {
       paramMap = paramMap as Map;
@@ -136,6 +142,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Global.context = context;
     return Scaffold(
       appBar: AppBar(      
         title: const Text(Constant.appTitle),

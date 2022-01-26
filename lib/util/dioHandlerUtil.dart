@@ -6,7 +6,7 @@ import 'package:flutter_poem/util/constantUtil.dart';
 
 var dio = Dio();
 
-mineInterceptors () async {
+mineInterceptors({onRequestCallback = '', onResponseCallback = '', onErrorCallback = ''}) async {
   dio.options.baseUrl = '';
   dio.options.responseType   = ResponseType.json;
   dio.options.connectTimeout = Constant.dioConnectTimeout;
@@ -14,14 +14,17 @@ mineInterceptors () async {
 
   dio.interceptors.add(
     InterceptorsWrapper(
-      onRequest: (options) {
+      onRequest: (RequestOptions requestOptions) {
         Alert.loadingmsg(position: AlertPosition.bottom, showingDuration: 0);
+        if(onRequestCallback != '') onRequestCallback(requestOptions);
       },
-      onResponse: (options) {
+      onResponse: (Response response) {
         Alert.triggerStopShowing();
+        if(onResponseCallback != '') onResponseCallback(response);
       },
       onError: (error) {
         Alert.triggerStopShowing();
+        if(onErrorCallback != '') onErrorCallback(error);
       }
     )
   );
@@ -33,7 +36,7 @@ class DioHandler {
     dio.options.baseUrl = url;
   }
   
-  static get (url, {queryParameters, headers = '', requests = '', successCallback = '', errorCallback = ''}) async{
+  static get (url, {queryParameters, headers = '', requests = '', onRequestCallback = '', onResponseCallback = '', onErrorCallback = ''}) async{
     mineInterceptors();
     try{
       Response response = await dio.get(dio.options.baseUrl + url, queryParameters: queryParameters ?? {});
@@ -42,10 +45,10 @@ class DioHandler {
       if(requests != '') { requests(response.request); }
 
       if(response.statusCode == 200) {
-        if(successCallback != '') { successCallback(response); }
+        if(onResponseCallback != '') { onResponseCallback(response); }
         return response;
       } else {
-        if(errorCallback != '') { errorCallback(response); }
+        if(onErrorCallback != '') { onErrorCallback(response); }
         throw Exception('statusCodeError: $response');
       }
     } on DioError catch (e) {

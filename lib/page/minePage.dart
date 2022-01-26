@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_poem/util/constantUtil.dart';
 import 'package:flutter_poem/util/dioHandlerUtil.dart';
+import 'package:flutter_poem/util/globalUtil.dart';
 
 class MinePage extends StatefulWidget {
   const MinePage({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _MinePageState extends State<MinePage> {
 
   @override
   Widget build(BuildContext context) {
+    Global.context = context;
     return Scaffold(
       appBar: AppBar(      
         title: const Text(Constant.appTitle),

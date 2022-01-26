@@ -7,8 +7,6 @@ void main() {
   runApp(const PoemApp());
 }
 
-final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
-
 class PoemApp extends StatelessWidget {
   const PoemApp({Key? key}) : super(key: key);
 
@@ -20,8 +18,6 @@ class PoemApp extends StatelessWidget {
       theme: ThemeData(        
         primarySwatch: Colors.blue,
       ),
-      builder: OneContext().builder,
-      navigatorKey: OneContext().key,
       home: const MineRouter()
     );
   }

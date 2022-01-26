@@ -67,11 +67,14 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-    Alert.tips(msg: 'searchPageTipsTest');
+    Future.delayed(const Duration(seconds: 3), (){
+      Alert.tips(msg: 'searchPageTipsTest');
+    });
   }
   
   @override
   Widget build(BuildContext context) {
+    Global.context = context;
     // ignore: unnecessary_new
     return new Scaffold(
       appBar: AppBar(

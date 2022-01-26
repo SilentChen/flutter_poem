@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_poem/page/homePage.dart';
 import 'package:flutter_poem/page/searchPage.dart';
 import 'package:flutter_poem/page/minePage.dart';
-import 'package:flutter_poem/util/globalUtil.dart';
 
 class MineRouter extends StatefulWidget {
   const MineRouter({Key? key}) : super(key: key);
