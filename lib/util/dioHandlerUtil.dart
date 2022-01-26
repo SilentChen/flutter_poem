@@ -22,7 +22,7 @@ mineInterceptors({onRequestCallback = '', onResponseCallback = '', onErrorCallba
         Alert.triggerStopShowing();
         if(onResponseCallback != '') onResponseCallback(response);
       },
-      onError: (error) {
+      onError: (DioError error) {
         Alert.triggerStopShowing();
         if(onErrorCallback != '') onErrorCallback(error);
       }
@@ -36,8 +36,18 @@ class DioHandler {
     dio.options.baseUrl = url;
   }
   
-  static get (url, {queryParameters, headers = '', requests = '', onRequestCallback = '', onResponseCallback = '', onErrorCallback = ''}) async{
-    mineInterceptors();
+  static get (url, {
+    queryParameters, headers = '',
+    requests = '',
+    onRequestCallback = '',
+    onResponseCallback = '',
+    onErrorCallback = ''
+  }) async{
+    mineInterceptors(
+      onRequestCallback: onRequestCallback,
+      onResponseCallback: onResponseCallback,
+      onErrorCallback: onErrorCallback
+    );
     try{
       Response response = await dio.get(dio.options.baseUrl + url, queryParameters: queryParameters ?? {});
 
@@ -45,10 +55,8 @@ class DioHandler {
       if(requests != '') { requests(response.request); }
 
       if(response.statusCode == 200) {
-        if(onResponseCallback != '') { onResponseCallback(response); }
         return response;
       } else {
-        if(onErrorCallback != '') { onErrorCallback(response); }
         throw Exception('statusCodeError: $response');
       }
     } on DioError catch (e) {
