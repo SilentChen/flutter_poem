@@ -37,9 +37,6 @@ dependencies:
   flutter_html: ^2.2.1
   dio: ^3.0.0
   safemap: ^2.0.0-nullsafety.0
-  flutter_tencentplayer_plus:
-    git:
-      url: https://github.com/yxwandroid/flutter_tencentplayer_plus.git
 
 dev_dependencies:
   flutter_test:
