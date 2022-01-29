@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_poem/models/newsListItemModel.dart';
 import 'package:flutter_poem/page/searchPage.dart';
+import 'package:flutter_poem/page/videoPage.dart';
 import 'package:flutter_poem/util/constantUtil.dart';
 import 'package:flutter_poem/util/dioHandlerUtil.dart';
 import 'package:flutter_poem/util/globalUtil.dart';
@@ -94,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                   buttonColor: const Color(0xff1C64CF),
                   shape: const StadiumBorder(),
                   child: RaisedButton(
-                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage())),
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VideoPage())),
                     padding: const EdgeInsets.all(2.0),
                     child: const Text(
                       'Listening',
