@@ -1,7 +1,7 @@
 import 'dart:convert';
-
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:dio/dio.dart';
-import 'package:flutter_poem/component/alertComponent.dart';
+import 'package:flutter_poem/widget/alertWidget.dart';
 import 'package:flutter_poem/util/constantUtil.dart';
 
 var dio = Dio();

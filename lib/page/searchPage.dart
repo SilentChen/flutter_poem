@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_poem/component/alertComponent.dart';
+import 'package:flutter_poem/widget/alertWidget.dart';
 import 'package:flutter_poem/util/constantUtil.dart';
 import 'package:flutter_poem/util/globalUtil.dart';
 

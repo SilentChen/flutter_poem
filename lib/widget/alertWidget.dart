@@ -156,7 +156,7 @@ class Alert {
     }
 
     return OverlayEntry(
-          builder: (BuildContext context) => Positioned(
+          builder: (BuildContext context) => Positioned (
             top: positionTopValue,
             child: Container(
               alignment: Alignment.center,
