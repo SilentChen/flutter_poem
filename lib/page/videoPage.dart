@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:flutter_poem/util/constantUtil.dart';
+
+FocusNode focusNode = new FocusNode();
+LayerLink layerLink = new LayerLink();
 
 class VideoPage extends StatefulWidget {
   const VideoPage({Key? key}) : super(key: key);
@@ -10,6 +14,7 @@ class VideoPage extends StatefulWidget {
 
 class _VideoPage extends State<VideoPage> {
   late FlutterAliplayer player;
+  late OverlayEntry overlayEntry;
   
   @override
   void initState() {
@@ -22,6 +27,31 @@ class _VideoPage extends State<VideoPage> {
     super.deactivate();
     player.stop();
     player.destroy();
+  }
+
+  OverlayEntry playsettingOverlay() {
+    return OverlayEntry(builder: (context){
+      return Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(50.0),
+          child: Form(
+            child: ListView(
+              children: <Widget> [
+                TextFormField(decoration: const InputDecoration(labelText: 'test1')),
+                const SizedBox(height: Constant.UI_INPUT_ROWHIGHT),
+                TextFormField(decoration: const InputDecoration(labelText: 'test2')),
+                const SizedBox(height: Constant.UI_INPUT_ROWHIGHT),
+                TextFormField(decoration: const InputDecoration(labelText: 'test3')),
+                const SizedBox(height: Constant.UI_INPUT_ROWHIGHT),
+                RaisedButton(onPressed: (){
+                  print('test playersetting overlay');
+                }, child: const Text('Play'))
+              ],
+            ),
+          ),
+        ),
+      );
+    });
   }
 
   @override
@@ -47,7 +77,7 @@ class _VideoPage extends State<VideoPage> {
         y: y,
         width: width,
         height: height
-    );
+    );    
     
     return OrientationBuilder(
       builder: (BuildContext context, Orientation orientation) {
