@@ -3,8 +3,8 @@ import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:flutter_poem/util/constantUtil.dart';
 
-FocusNode focusNode = new FocusNode();
-LayerLink layerLink = new LayerLink();
+FocusNode focusNode = FocusNode();
+LayerLink layerLink = LayerLink();
 
 class VideoPage extends StatefulWidget {
   const VideoPage({Key? key}) : super(key: key);
@@ -20,6 +20,10 @@ class _VideoPage extends State<VideoPage> {
   void initState() {
     super.initState();
     player = FlutterAliPlayerFactory.createAliPlayer();
+    Future.delayed(const Duration(seconds: 1), (){
+      overlayEntry = playsettingOverlay();
+      Overlay.of(context)?.insert(overlayEntry);
+    });
   }
 
   @override
@@ -45,6 +49,7 @@ class _VideoPage extends State<VideoPage> {
                 const SizedBox(height: Constant.UI_INPUT_ROWHIGHT),
                 RaisedButton(onPressed: (){
                   print('test playersetting overlay');
+                  overlayEntry.remove();
                 }, child: const Text('Play'))
               ],
             ),

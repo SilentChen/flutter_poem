@@ -1,10 +1,8 @@
 import 'dart:async';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_poem/models/newsListItemModel.dart';
-import 'package:flutter_poem/page/searchPage.dart';
 import 'package:flutter_poem/page/videoPage.dart';
 import 'package:flutter_poem/util/constantUtil.dart';
 import 'package:flutter_poem/util/dioHandlerUtil.dart';
